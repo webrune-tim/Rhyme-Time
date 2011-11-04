@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Rhyme Time</title>
+	
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<script src="http://code.jquery.com/jquery-1.7.min.js" type="text/javascript"></script>
+	<script src="jquery.alphanumeric.js" type="text/javascript"></script>
+	<!--<script src="jquery.alphanumeric.pack.js" type="text/javascript"></script>-->
+	<link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
+	<script>
+		$(function(){
+			$('#word1').alpha({nocaps:true});
+			$('#word2').alpha({nocaps:true});
+		});
+		
+		function checkWords() {
+			var word1 = rhymeForm.word1.value.toLowerCase();
+			var word2 = rhymeForm.word2.value.toLowerCase();
+			
+			//validate inputs
+			//each variable should contain only one word containing only alpha characters
+			
+			var rhymes = doesItRhyme(word1, word2);
+			
+			//display result
+			var displaystring;
+			
+			if (rhymes === true){
+				displaystring = "<p style='color:green;'>The words " + word1 + " and " + word2 +" rhyme</p>";
+			} else {
+				displaystring = "<p style='color:red;'>The words " + word1 + " and " + word2 +" do not rhyme</p>";
+			}
+			
+			$('#result').empty().append(displaystring);
+		}
+	
+		function doesItRhyme(w1, w2) {
+			var isRhyme = false;
+			console.info("Checking %s and %s", w1, w2);
+			//do checks
+			
+			if(lastTwoLettersAT(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersOAT(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersIME(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersATE(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersOVE(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersEST(w1, w2))
+				isRhyme = true;
+			if(lastThreeLettersOOD(w1, w2))
+				isRhyme = true;
+				
+			//if(!isRhyme)
+			//	isRhyme = lastTwoLettersAT(w1, w2);
+			
+			console.info("The words %s and %s DO %s rhyme.", w1, w2, (isRhyme ? "" : "NOT"));
+			return isRhyme;
+		}
+		
+		function lastTwoLettersAT (w1, w2) {
+			//Are the last two letters of both words "at" - ie: cat, hat, rat
+			var expression = /[^aeiou]at$/i;
+			
+			return expression.test(w1) && expression.test(w2);
+		}
+		
+		function lastThreeLettersOAT (w1, w2) {
+			//Are the last three letters of both words "oat" - ie: boat, coat, bloat
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return (w1.substring(w1.length - 3) == "oat")
+				 && (w2.substring(w2.length - 3) == "oat");
+		}
+		
+		function lastThreeLettersIME (w1, w2) {
+			//Are the last three letters of both words "ime" - ie: slime, dime, crime
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return (w1.substring(w1.length - 3) == "ime")
+				 && (w2.substring(w2.length - 3) == "ime");
+		}
+		
+		function lastThreeLettersATE (w1, w2) {
+			//Are the last three letters of both words "ate" - ie: plate, slate, hate
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return (w1.substring(w1.length - 3) == "ate")
+				 && (w2.substring(w2.length - 3) == "ate");
+		}
+		
+		function lastThreeLettersOVE (w1, w2) {
+			//Are the last three letters of both words "ove" - ie: love, glove, above
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return (w1.substring(w1.length - 3) == "ove")
+				 && (w2.substring(w2.length - 3) == "ove");
+		}
+		
+		function lastThreeLettersEST (w1, w2) {
+			//Are the last three letters of both words "est" - ie: best, rest **** Solve breast ****
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return ((w1.substring(w1.length - 3) == "est") || (w1.substring(w2.length - 4) == "east"))
+				 && ((w2.substring(w1.length - 4) == "est") || (w2.substring(w2.length - 4) == "east"));
+		}
+		
+		function lastThreeLettersOOD (w1, w2) {
+			//Are the last three letters of both words "ood" or "ude" - ie: love, glove, above
+			var length1 = w1.length;
+			var length2 = w2.length;
+			
+			return ((w1.substring(w1.length - 3) == "ood") || (w1.substring(w2.length - 3) == "ude"))
+				 && ((w2.substring(w1.length - 3) == "ood") || (w2.substring(w2.length - 3) == "ude"));
+		}
+		
+		function isVowel(letter) {
+			if (letter === "a"
+		     || letter === "e" 
+		     || letter === "i" 
+		     || letter === "o" 
+		     || letter === "u" 
+		     || letter === "y")
+				return true;
+		     return false;
+		}
+			
+		
+		
+	</script>
+	
+	<style>
+		html, body{
+		background: #333;
+			font-family: 'Quicksand', sans-serif;
+		}
+		
+		label {  
+			float: left;
+			width: 70px;
+		}
+		
+		#container{
+			padding: 10px;
+			margin: 0 auto;
+			width: 200px;
+			height: 100%;
+			background: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<section id="container">
+		<h1>Rhyme Time</h1>
+		<p>Please enter two words in the boxes below.  I will do my best to see if they rhyme.</p>
+		<div id="result">	
+		</div>
+		<form id="rhymeForm">
+			<label for="word1">Word1:</label>
+			<input type="text" id="word1" required /><br />
+			
+			<label for="word2">Word2:</label>
+			<input type="text" id="word2" required /><br />
+			<input type="button" id="submit" value="Check" onClick="checkWords()"/>
+		</form>
+	</section>
+</body>
+</html>
